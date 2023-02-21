@@ -1,48 +1,25 @@
 import { useState } from "react";
-import TreeNode, { TreeNodeProps } from "./TreeNode";
+import { RECURSIVE_TREE_NODES } from "./InitialRecursiveData";
+import RecursiveTreeNode, { TreeNodeData } from "./RecursiveTreeNode";
 
-const TREE_ELEMENTS: TreeNodeProps[] = [
-  {
-    text: "Lorem",
-    children: [
-      { text: "Ipsum" },
-      {
-        text: "Dolor",
-        children: [
-          {
-            text: "Orco",
-            children: [{ text: "Quis", children: [{ text: "Odio" }] }],
-          },
-        ],
-      },
-      { text: "Sit", children: [{ text: "Amet" }, { text: "Consectetur" }] },
-      {
-        text: "Adipiscing",
-        children: [
-          {
-            text: "Elit",
-            children: [{ text: "Vestibulum" }, { text: "Vitae" }],
-          },
-        ],
-      },
-    ],
-  },
-];
-
-function RecursiveTree() {
-  const [children, setChildren] = useState(TREE_ELEMENTS);
-  const addChild = (childProps: TreeNodeProps) => {
-    setChildren([...children, childProps]);
+const RecursiveTree = () => {
+  const [nodes, setNodes] = useState(RECURSIVE_TREE_NODES);
+  const addNode = (data: TreeNodeData) => {
+    setNodes([...nodes, data]);
   };
 
   return (
     <div>
       <h2>Recursive</h2>
-      {children.map((props, i) => (
-        <TreeNode key={props.text + i} {...props} addSibling={addChild} />
+      {nodes.map((props, i) => (
+        <RecursiveTreeNode
+          key={props.text + i}
+          {...props}
+          addSibling={addNode}
+        />
       ))}
     </div>
   );
-}
+};
 
 export default RecursiveTree;

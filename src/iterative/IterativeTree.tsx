@@ -1,64 +1,39 @@
 import { useState } from "react";
-import TreeNode, { TreeNodeProps } from "./TreeNode";
+import { ITERATIVE_TREE_NODES } from "./IterativeTreeData";
+import IterativeTreeNode, { TreeNodeData } from "./IterativeTreeNode";
 
-const TREE_ELEMENTS: Omit<TreeNodeProps, "add">[] = [
-  {
-    depth: 0,
-    text: "Lorem",
-  },
-  { text: "Ipsum", depth: 1 },
-  {
-    text: "Dolor",
-    depth: 1,
-  },
-  {
-    text: "Orco",
-    depth: 2,
-  },
-  { text: "Quis", depth: 3 },
-  { text: "Odio", depth: 4 },
-  { text: "Sit", depth: 1 },
-  { text: "Amet", depth: 2 },
-  { text: "Consectetur", depth: 2 },
-  {
-    text: "Adipiscing",
-    depth: 1,
-  },
-  {
-    text: "Elit",
-    depth: 2,
-  },
-  { text: "Vestibulum", depth: 3 },
-  { text: "Vitae", depth: 3 },
-];
+export const CHILD = "CHILD" as const;
+export const SIBLING = "SIBLING" as const;
+export type AddProps = {
+  nodeData: TreeNodeData;
+  newType: typeof CHILD | typeof SIBLING;
+  newText: string;
+};
 
 function IterativeTree() {
-  const [children, setChildren] = useState(TREE_ELEMENTS);
-  const add = (
-    props: Omit<TreeNodeProps, "add">,
-    type: "CHILD" | "SIBLING",
-    text: string
-  ) => {
-    const idx = children.findIndex((x) => x.text === props.text);
-    console.log(idx);
+  const [nodes, setNodes] = useState(ITERATIVE_TREE_NODES);
+
+  const add = ({ newText, newType, nodeData }: AddProps) => {
+    // TO DO: lookup by id, this might lead to errors on same name elements
+    const idx = nodes.findIndex((x) => x.text === nodeData.text);
 
     if (idx !== -1) {
-      const newItem: Omit<TreeNodeProps, "add"> = {
-        text,
-        depth: props.depth + (type === "CHILD" ? 1 : 0),
+      const newItem: TreeNodeData = {
+        text: newText,
+        depth: nodeData.depth + (newType === CHILD ? 1 : 0),
       };
-      const newChildren = [...children];
+      const newChildren = [...nodes];
       newChildren.splice(idx + 1, 0, newItem);
 
-      setChildren(newChildren);
+      setNodes(newChildren);
     }
   };
 
   return (
     <div>
       <h2>Iterative</h2>
-      {children.map((props, i) => (
-        <TreeNode key={props.text + i} {...props} add={add} />
+      {nodes.map((props, i) => (
+        <IterativeTreeNode key={props.text + i} {...props} add={add} />
       ))}
     </div>
   );

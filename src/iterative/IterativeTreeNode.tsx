@@ -1,23 +1,26 @@
 import { FC, useState } from "react";
+import { AddProps, CHILD, SIBLING } from "./IterativeTree";
 
 export type TreeNodeProps = {
   text: string;
   depth: number;
-  add: (props: TreeNodeProps, type: "CHILD" | "SIBLING", text: string) => void;
+  add: (props: AddProps) => void;
 };
 
-const TreeNode: FC<TreeNodeProps> = (props) => {
+export type TreeNodeData = Omit<TreeNodeProps, "add">;
+
+const IterativeTreeNode: FC<TreeNodeProps> = (props) => {
   const { add, depth, text } = props;
   const [showBtns, setShowBtns] = useState(false);
   const [inputText, setInputText] = useState("");
 
   const onAddChild = () => {
-    add(props, "CHILD", inputText);
+    add({ nodeData: props, newType: CHILD, newText: inputText });
     setInputText("");
   };
 
   const onAddSibling = () => {
-    add(props, "SIBLING", inputText);
+    add({ nodeData: props, newType: SIBLING, newText: inputText });
     setInputText("");
   };
 
@@ -70,4 +73,4 @@ const TreeNode: FC<TreeNodeProps> = (props) => {
   );
 };
 
-export default TreeNode;
+export default IterativeTreeNode;

@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState } from "react";
 import IterativeTree from "./iterative/IterativeTree";
 import RecursiveTree from "./recursive/RecursiveTree";
 
