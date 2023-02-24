@@ -1,33 +1,30 @@
 import { FC, useState } from "react";
 
 export type TreeNodeProps = {
+  id: string;
   text: string;
   children?: TreeNodeData[];
-  addSibling(childProps: TreeNodeData): void;
+  addNode: (parentId: string, text: string) => void;
 };
 
-export type TreeNodeData = Omit<TreeNodeProps, "addSibling">;
+export type TreeNodeData = Omit<TreeNodeProps, "addNode">;
 
 const RecursiveTreeNode: FC<TreeNodeProps> = ({
   text,
-  addSibling,
-  ...props
+  addNode,
+  id,
+  children,
 }) => {
   const [showBtns, setShowBtns] = useState(false);
   const [inputText, setInputText] = useState("");
-  const [children, setChildren] = useState(props.children);
-
-  const addChild = (childProps: TreeNodeData) => {
-    setChildren([...(children ?? []), childProps]);
-  };
 
   const onAddChild = () => {
-    addChild({ text: inputText });
+    addNode(id, inputText);
     setInputText("");
   };
 
   const onAddSibling = () => {
-    addSibling({ text: inputText });
+    addNode(id, inputText);
     setInputText("");
   };
 
@@ -77,11 +74,7 @@ const RecursiveTreeNode: FC<TreeNodeProps> = ({
         )}
       </div>
       {children?.map((props, i) => (
-        <RecursiveTreeNode
-          key={props.text + i}
-          {...props}
-          addSibling={addChild}
-        />
+        <RecursiveTreeNode key={props.text + i} {...props} addNode={addNode} />
       ))}
     </div>
   );

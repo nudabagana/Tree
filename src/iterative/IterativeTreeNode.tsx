@@ -2,25 +2,26 @@ import { FC, useState } from "react";
 import { AddProps, CHILD, SIBLING } from "./IterativeTree";
 
 export type TreeNodeProps = {
+  id: string;
   text: string;
   depth: number;
-  add: (props: AddProps) => void;
+  addNode: (parentId: string, text: string) => void;
 };
 
-export type TreeNodeData = Omit<TreeNodeProps, "add">;
+export type TreeNodeData = Omit<TreeNodeProps, "addNode">;
 
 const IterativeTreeNode: FC<TreeNodeProps> = (props) => {
-  const { add, depth, text } = props;
+  const { addNode, depth, text, id } = props;
   const [showBtns, setShowBtns] = useState(false);
   const [inputText, setInputText] = useState("");
 
   const onAddChild = () => {
-    add({ nodeData: props, newType: CHILD, newText: inputText });
+    addNode(id, inputText);
     setInputText("");
   };
 
   const onAddSibling = () => {
-    add({ nodeData: props, newType: SIBLING, newText: inputText });
+    addNode(id, inputText);
     setInputText("");
   };
 

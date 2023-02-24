@@ -1,22 +1,18 @@
 import { useState } from "react";
-import { RECURSIVE_TREE_NODES } from "./InitialRecursiveData";
+import { TREE_NODES } from "../InitialData";
 import RecursiveTreeNode, { TreeNodeData } from "./RecursiveTreeNode";
 
-const RecursiveTree = () => {
-  const [nodes, setNodes] = useState(RECURSIVE_TREE_NODES);
-  const addNode = (data: TreeNodeData) => {
-    setNodes([...nodes, data]);
-  };
+type Props = {
+  nodes: TreeNodeData[];
+  addNode: (parentId: string, text: string) => void;
+};
 
+const RecursiveTree = ({ nodes, addNode }: Props) => {
   return (
     <div>
       <h2>Recursive</h2>
       {nodes.map((props, i) => (
-        <RecursiveTreeNode
-          key={props.text + i}
-          {...props}
-          addSibling={addNode}
-        />
+        <RecursiveTreeNode addNode={addNode} key={props.text + i} {...props} />
       ))}
     </div>
   );
